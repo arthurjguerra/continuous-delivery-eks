@@ -10,7 +10,7 @@ jobs:
         - image: hashicorp/terraform:1.2.7
     steps:
         - checkout # checkout the code
-        - run: bash scripts/tests-infra
+        - run: scripts/tests-infra
     
 workflows:
   build_and_test:

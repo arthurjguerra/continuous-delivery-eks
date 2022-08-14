@@ -1,15 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
 function validate_terraform() {
     echo "Validating Terraform code"
+    cd infra
+    terraform init
     terraform validate -no-color
 }
 
 function main() {
-    "Continous Delivery EKS CI Tests"
-    #validate_terraform
-    pwd
-    whoami
+    echo "Continous Delivery EKS CI Tests"
+    validate_terraform
 }
 
 main "$@"
