@@ -2,18 +2,12 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: hashicorp/terraform:1.2.7
-    steps:
-      - run: echo "hello world"
-  tests-infra:
-    docker:
         - image: hashicorp/terraform:1.2.7
     steps:
         - checkout # checkout the code
-        - run: scripts/tests-infra
+        - run: scripts/deploy-infra
     
 workflows:
   build_and_test:
     jobs:
       - build
-      - tests-infra
