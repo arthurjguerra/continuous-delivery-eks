@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Runs checks that verify whether a configuration is syntactically valid and internally consistent
+# https://www.terraform.io/cli/commands/validate
+function validate() {
+    echo "Validating Terraform code"
+    terraform validate -no-color
+}
+
+function init() {
+    echo "Validating Terraform code"
+    terraform init
+}
+
+function deploy() {
+    echo "Deploying infra"
+    terraform apply
+}
+
+function main() {
+    echo "Continous Delivery EKS CI Tests"
+    cd infra
+    init
+    validate
+    deploy
+}
+
+main "$@"
