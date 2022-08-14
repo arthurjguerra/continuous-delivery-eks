@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function validate_terraform() {
+    echo "Validating Terraform code"
+    terraform validate -no-color
+}
+
+function main() {
+    "Continous Delivery EKS CI Tests"
+    #validate_terraform
+    pwd
+    whoami
+}
+
+main "$@"
