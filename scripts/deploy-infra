@@ -1,1 +1,26 @@
 #!/bin/sh
+
+function validate() {
+    echo "Validating Terraform code"
+    terraform validate -no-color
+}
+
+function init() {
+    echo "Initializing Terraform"
+    terraform init
+}
+
+function deploy() {
+    echo "Deploying infra"
+    terraform apply -auto-approve
+}
+
+function main() {
+    echo "Continous Delivery EKS CI Tests"
+    cd infra
+    init
+    validate
+    deploy
+}
+
+main "$@"
