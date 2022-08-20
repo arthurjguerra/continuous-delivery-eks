@@ -1,28 +1,20 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloapp
+  name: continuous-delivery-eks
 spec:
-  replicas: 1
-  strategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxSurge: 1
-    maxUnavailable: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app: continuous-delivery-eks
   template:
     metadata:
       labels:
-        app: realworld
+        app: continuous-delivery-eks
         env: dev
     spec:
       containers:
-      - name: realworld
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: Always
-        readinessProbe:
-          httpGet:
-            path: /hello
-            port: 8000
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            successThreshold: 1
+        - name: continuous-delivery-eks
+          image: arthurjguerra18/continuous-delivery-eks-realworld:0.1.73
+          ports:
+            - containerPort: 8000
