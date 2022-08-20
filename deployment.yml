@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: continuous-delivery-eks
+  name: continuous-delivery-eks-deployment
 spec:
   replicas: 3
   selector:
@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: continuous-delivery-eks
-          image: arthurjguerra18/continuous-delivery-eks-realworld:0.1.73
+          image: arthurjguerra18/continuous-delivery-eks-realworld:0.1.76
           ports:
             - containerPort: 8000
