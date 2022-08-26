@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: continuous-delivery-eks
+  name: continuous-delivery-eks-svc
 spec:
   selector:
     app: continuous-delivery-eks
