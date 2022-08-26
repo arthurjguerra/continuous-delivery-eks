@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: continuous-delivery-eks
+spec:
+  selector:
+    app: continuous-delivery-eks
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: LoadBalancer

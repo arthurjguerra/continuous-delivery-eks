@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: continuous-delivery-eks-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: continuous-delivery-eks
+  template:
+    metadata:
+      labels:
+        app: continuous-delivery-eks
+        env: dev
+    spec:
+      containers:
+        - name: continuous-delivery-eks
+          image: arthurjguerra18/continuous-delivery-eks-realworld:0.1.76
+          ports:
+            - containerPort: 8000
