@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   aws-eks: circleci/aws-eks@2.2.0
   kubernetes: circleci/kubernetes@1.3
+  helm: circleci/helm@2.0.1
 jobs:
   build:
     docker:
@@ -43,6 +44,45 @@ jobs:
       - kubernetes/create-or-update-resource:
           resource-file-path: svc.yml
           resource-name: svc/continuous-delivery-eks-svc
+  install-helm-chart:
+    docker:
+      - image: 'cimg/python:3.10'
+    parameters:
+      cluster-name:
+        description: Cluster name
+        type: string
+      aws-region:
+        description: |
+          AWS Region
+        type: string
+    steps:
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+          aws-region: << parameters.aws-region >>
+      - helm/install-helm-client:
+          version: v3.8.2
+      - helm/install-helm-chart:
+          chart: grafana/loki-stack
+          add-repo: "https://grafana.github.io/helm-charts"
+          release-name: loki
+  delete-helm-release:
+    docker:
+      - image: 'cimg/python:3.10'
+    parameters:
+      cluster-name:
+        description: Cluster name
+        type: string
+      aws-region:
+        description: |
+          AWS Region
+        type: string
+    steps:
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+          aws-region: << parameters.aws-region >>
+      - helm/delete-helm-release:
+          release-name: loki
+          timeout: 600s
     
 workflows:
   build:
@@ -58,10 +98,15 @@ workflows:
           aws-region: eu-west-1
           requires:
             - aws-eks/create-cluster
+      - install-helm-chart:
+          cluster-name: continuous-delivery-eks
+          aws-region: eu-west-1
+          requires:
+            - aws-eks/create-cluster
       - aws-eks/update-container-image:
           cluster-name: continuous-delivery-eks
           aws-region: eu-west-1
-          container-image-updates: 'continuous-delivery-eks=continuous-delivery-eks:0.1.$CIRCLE_BUILD_NUM'
+          container-image-updates: 'continuous-delivery-eks=continuous-delivery-eks:0.2.$CIRCLE_BUILD_NUM'
           resource-name: deployment/continuous-delivery-eks-deployment
           post-steps:
             - kubernetes/delete-resource:
